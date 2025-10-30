@@ -1,10 +1,9 @@
 # app.py (เวอร์ชันถูกต้อง พร้อมระบบ homography + search)
 import time
 from utils.cfg import load_cfg
-from ioM.video_source import VideoSource
+# from ioM.video_source import VideoSource
 from ioM.command_sink import CommandSink
 from ioM.visualizer import draw, safe_show
-from ioM.video_source import VideoSource
 from ioM.tcp_video_source import TCPVideoSource
 from ai_core.detector import Detector
 from ai_core.controller import make_command
@@ -30,11 +29,11 @@ def main():
         src = TCPVideoSource("192.168.1.103", 6000)  # <-- ใส่ IP ของ Pi
         print("[INFO] Using Pi camera stream")
     else:
-        src = VideoSource(cfg.camera.source, cfg.camera.width, cfg.camera.height)
+        # src = VideoSource(cfg.camera.source, cfg.camera.width, cfg.camera.height)
         print("[INFO] Using local webcam")
 
     # 1) I/O
-    src = VideoSource(cfg.camera.source, cfg.camera.width, cfg.camera.height)
+    # src = VideoSource(cfg.camera.source, cfg.camera.width, cfg.camera.height)
     sink = CommandSink(print_cmd=cfg.runtime.print_cmd)
 
     # 2) Model
@@ -52,8 +51,7 @@ def main():
         while True:
             frame = src.read()
             if frame is None:
-                print("[INFO] stream end")
-                break
+                continue
 
             # --- รัน YOLO ---
             dets = det.infer(frame)
