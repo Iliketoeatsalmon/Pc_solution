@@ -1,0 +1,19 @@
+model: "yolo11m.pt"
+classes:
+  bottle: 39           # COCO id
+camera:
+  source: 0            # 0=webcam, หรือ "video.mp4"
+  width: 640
+  height: 480
+geometry:
+  focal_length_px: 550        # ปรับใหม่จาก 389.23 → 115
+  real_object_width_cm: 6.5   # ปรับตามความกว้างจริงของขวด (ขวดน้ำขนาด 600ml ~ 6.5cm)
+  h_fov_deg: 60
+control:
+  desired_time_s: 5.0
+  stop_distance_cm: 55
+  max_vx: 0.6
+  wz_gain: 1.0
+runtime:
+  gui: true           # true เพื่อเปิดหน้าต่าง
+  print_cmd: true
