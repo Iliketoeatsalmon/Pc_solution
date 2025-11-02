@@ -1,17 +1,35 @@
-model: "yolo11m.pt"     # หรือ "yolo11m.pt"
+# ---- networking (for Pi bridge) ----
+network:
+  pi_ip: "192.168.195.177"    # <-- your Pi IP
+  video_port: 6000 
+  cmd_port: 6001
+
+# ---- model ----
+model: "best.pt"  # <-- your YOLOv11m trained weights
+
+# Your custom class ids (NOT COCO)
+# bottle=0, leaf=1 (from your training)
 classes:
-  bottle: 39
-
-camera:
-  source: 0
-  width: 640
-  height: 480
-
+  bottle: 0
+  leaf: 1
+  
+homography:
+  use: false  # หรือ true + ตั้งไฟล์ H.npy ให้ถูก
+# ---- camera/geometry ----
 geometry:
-  focal_length_px: 559
-  real_object_width_cm: 6.5
+  focal_length_px: 115        # your calibrated value
+  real_object_width_cm: 6.5   # target physical width
   h_fov_deg: 60
 
+# ---- detector params ----
+detector:
+  imgsz: 640
+  conf: 0.25
+  iou: 0.50
+  rotate_cd: 4
+  enable_lazy_rotate: false   # not used by this script, OK to leave
+
+# ---- control (kept for compatibility, not used here) ----
 control:
   desired_time_s: 5.0
   stop_distance_cm: 55
@@ -22,14 +40,19 @@ control:
   yaw_min_wz: 0.12
   yaw_max_wz: 0.8
 
-detector:
-  imgsz: 640
-  conf: 0.20
-  iou: 0.50
-  rotate_cd: 4
-  enable_lazy_rotate: true
-
+# ---- runtime ----
 runtime:
   gui: true
   print_cmd: true
-  device: "cuda"   # หรือ "cuda:0" / "mps"
+  device: "cuda"          # "cuda", "cuda:0", "mps", or "cpu"
+  process_every_n: 2      # run YOLO every N frames
+
+  use: true
+  file: "tools/H.npy"
+
+filter:
+  use_kalman: true
+  kf_init_cm: 150.0     # ระยะเริ่มต้น (เดาๆ)
+  kf_init_var: 200.0    # ความไม่แน่นอนเริ่มต้น
+  kf_q: 2.0             # process noise (ยิ่งมากยิ่งตามเร็ว)
+  kf_r: 50.0            # measurement noise (ยิ่งมากยิ่งนุ่ม/ช้า)

@@ -1,6 +1,6 @@
 import cv2, numpy as np
 
-IMG_SRC = "tools/calib_from_pi.jpg"   # เดิมเคยเป็น 0
+IMG_SRC = "calib_from_pi.jpg"   # เดิมเคยเป็น 0
 OUT_NPY = "clicked_points.npy"
 
 
